@@ -20,7 +20,21 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <ClerkProvider>
+    <ClerkProvider
+       appearance={{
+        signIn: {
+          variables: {
+            colorPrimary: "#F9AA11"
+          },
+          
+        },
+        signUp: {
+          variables: {
+            colorPrimary: "#F9AA11"
+        }
+      }
+       }}
+    >
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
       <StyledComponentsRegistry>
