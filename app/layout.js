@@ -3,6 +3,7 @@ import "./globals.css";
 import StyledComponentsRegistry from "@/lib/AntRegistry";
 // import { ClerkProvider } from "@clerk/nextjs/dist/types/components.server";
 import { ClerkProvider } from "@clerk/nextjs";
+import "@/styles/typography.css"
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],

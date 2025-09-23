@@ -5,6 +5,7 @@ import ThemeProvider from '@/lib/ThemeProvider'
 import React from 'react'
 import css from "@/styles/homeLayout.module.css";
 import Header from '@/components/Header';
+import Sidebar from '@/components/Sidebar';
 
 const homeLayout = ({children}) => {
   return (
@@ -14,8 +15,11 @@ const homeLayout = ({children}) => {
     <div className={css.wrapper} >
         <Header/>
         
-        
-        {children}
+        <div className={css.container}>
+                <Sidebar />
+
+                <div className={css.page_body}>{children}</div>
+              </div>
         
         </div>
     </Box>
