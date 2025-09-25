@@ -1,6 +1,6 @@
 "use client"
 
-import { useSettingContext } from '@/context/setting/settings-context'
+import { useSettingsContext } from '@/context/settings/settings-context'
 import { Icon } from '@iconify/react';
 import { Button } from 'antd';
 import React from 'react'
@@ -8,14 +8,14 @@ import React from 'react'
 const ModeButton = () => {
  
     const {
-        setSetting
-    } = useSettingContext();
+        setSettings
+    } = useSettingsContext();
 
 
   return (
         <Button style={{padding:0, border: "none"}}
         onClick={() => {
-            setSetting((prev) => ({
+            setSettings((prev) => ({
                 ...prev, theme: prev.theme==="light" ? "dark" : "light"
             }))
         }}  

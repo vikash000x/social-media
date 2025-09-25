@@ -1,79 +1,83 @@
-"use client"
-
-import { useClerk, useUser } from '@clerk/nextjs';
-import { usePathname, useRouter } from 'next/navigation';
-
-import React, { use, useCallback, useEffect } from 'react'
+"use client";
+import React, { useCallback, useEffect, useState } from "react";
+import Box from "./Box";
 import css from "@/styles/Sidebar.module.css";
-import { useState } from 'react';
-import { useSettingContext } from '@/context/setting/settings-context'; 
-import Box from './Box';
-import { sidebatRoutes } from '@/lib/sidebar';
-import Link from 'next/link';
+import { sidebarRoutes } from "@/lib/sidebar";
 import { Typography } from "antd";
 import Iconify from "./Iconify";
 import cx from "classnames";
-import SidebarContainer from './SidebarContainer';
-
+import { usePathname, useRouter } from "next/navigation";
+import Link from "next/link";
+import SidebarContainer from "./SidebarContainer";
+import { useSettingsContext } from "@/context/settings/settings-context";
+import { useClerk, useUser } from "@clerk/nextjs";
 const Sidebar = () => {
+  const pathname = usePathname();
+  const [mounted, setMounted] = useState(false);
+  const { signOut } = useClerk();
+  const router = useRouter();
+  const { user } = useUser();
+  console .log("user from sidebar", user);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
-    const pathname = usePathname();
-    const [mounted, setMounted] = useState(false);
-    const {signOut} = useClerk();
-    const router = useRouter();
-    const {user} = useUser();
-
-    useEffect(()=> {
-        setMounted(true);
-    }, []);
-
-    const {
-        setting : {isSidebarOpen},
-        setSetting
-    } = useSettingContext();
-
-    const handleDrawerClose = useCallback(()=> {
-        setSetting((prev)=>( {
-            ...prev,
-            isSidebarOpen: false
-        }))
-    }, [setSetting]);
-
-    useEffect(()=> {
-        if(isSidebarOpen) handleDrawerClose();
-        console.log("tt",isSidebarOpen);
-
-    }, [pathname, handleDrawerClose])
+  console.log("rotes",  router.route);
 
 
-    const isActive = (route) => {
-       if(route.route === pathname) return css.active;
+
+  console.log("jj", sidebarRoutes(user));
+  
+
+  const {
+    settings: { isSidebarOpen },
+    setSettings,
+  } = useSettingsContext();
+
+  const handleDrawerClose = useCallback(() => {
+    setSettings((prev) => ({
+      ...prev,
+      isSidebarOpen: false,
+    }));
+  }, [setSettings]);
+
+  useEffect(() => {
+    if (isSidebarOpen) {
+      handleDrawerClose();
     }
+  }, [pathname, handleDrawerClose]);
 
-    const activeColor = (route) => {
-        return isActive(route) && "var(--primary)";
-    }
+  const isActive = (route) => {
+    if (route.route === pathname) return css.active;
+  };
 
-    // console.log("bb", mounted, isSidebarOpen);
-    // console.log("user in sidebar", user);
-    // console.log(sidebatRoutes(user));
+  const activeColor = (route) => {
+    return isActive(route) && "var(--primary)";
+  };
+
+  console.log("bro", user?.id);
 
   return (
-   
- mounted && (
-    <SidebarContainer 
-    isDrawerOpen={isSidebarOpen}
-    setIsDrawerOpen={handleDrawerClose} >
-
+    mounted && (
+      <SidebarContainer
+        isDrawrOpen={isSidebarOpen}
+        setIsDrawerOpen={handleDrawerClose}
+      >
         <div className={css.wrapper}>
-            <Box className={css.container}>
-                {sidebatRoutes(user).map((route, index) => (
-                    <Link 
-                    href={route.route === "signout" ? "#" : route.route}
-                    key= {index}
-                    className={cx(css.item, isActive(route))}>
-
-               <Typography style={{ color: activeColor(route) }}>
+          <Box className={css.container}>
+            {sidebarRoutes(user).map((route, index) => (
+              <Link
+                // if the route is profile, then add the person query
+                href={
+                  route.route === `/profile/${user?.id}`
+                    ? `${route.route}?person=${user?.firstName}`
+                    : `${route.route}`
+                }
+                key={index}
+                className={cx(css.item, isActive(route))}
+              >
+                {/* icon */}
+                <Typography style={{ color: activeColor(route) }}>
                   <Iconify icon={route.icon} width={"20px"} />
                 </Typography>
 
@@ -81,14 +85,13 @@ const Sidebar = () => {
                 <Typography
                   className="typoSubtitle2"
                   style={{ color: activeColor(route) }}
-                >  
+                >
                   {route.name}
                 </Typography>
+              </Link>
+            ))}
 
-                    </Link>
-                ))}
-
-                  <Link
+            <Link
               href={""}
               className={cx(css.item)}
               onClick={() => {
@@ -103,14 +106,11 @@ const Sidebar = () => {
               {/* name */}
               <Typography className="typoSubtitle2">Sign out</Typography>
             </Link>
-            
-            </Box>
+          </Box>
         </div>
+      </SidebarContainer>
+    )
+  );
+};
 
-    </SidebarContainer>
- )
-
-  )
-}
-
-export default Sidebar
+export default Sidebar;

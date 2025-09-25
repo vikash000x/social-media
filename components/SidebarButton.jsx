@@ -1,30 +1,27 @@
-"use client"
+"use client";
 
-import { useSettingContext } from '@/context/setting/settings-context'
-import { Button, Typography } from 'antd';
-import React from 'react'
+import { Button, Typography } from "antd";
 import Iconify from "./Iconify";
+import { useSettingsContext } from "@/context/settings/settings-context";
 
 const SidebarButton = () => {
- const {setSetting} = useSettingContext();
-
-
+  const { setSettings } = useSettingsContext();
   return (
     <Button
-    type="text"
-    onClick={()=> {
-         setSetting((prev) =>( {
-            ...prev,
-            iseSidebarOpen: !prev.iseSidebarOpen
-         }));
-    }}
-    icon={
-       <Typography>
+      type="text"
+      onClick={() => {
+        setSettings((prev) => ({
+          ...prev,
+          isSidebarOpen: !prev.isSidebarOpen,
+        }));
+      }}
+      icon={
+        <Typography>
           <Iconify icon="heroicons-solid:menu-alt-2" width="22px" />
         </Typography>
-    }
+      }
     />
-  )
-}
+  );
+};
 
-export default SidebarButton
+export default SidebarButton;

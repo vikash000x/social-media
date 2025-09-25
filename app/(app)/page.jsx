@@ -1,23 +1,29 @@
-"use client"
+import {  getMyPostsFeed } from "@/actions/post";
+import HomeView from "@/sections/home/view/HomeView";
+import { currentUser } from "@clerk/nextjs";
+import { QueryClient } from "@tanstack/react-query";
 
-import { useSettingContext } from '@/context/setting/settings-context'
-import React from 'react'
+export const metadata = () => {
+  return {
+    title: `Socialhop`,
+    description: `New way to feel freedom`,
+  };
+};
 
-// export const metadata = () => {
-//     return {
-//         title: `social media | Home`,
-//         description: "This is social media home page"
-//     }
-// }
+const HomePage = async () => {
+  // const queryClient = new QueryClient();
+  // const user = await currentUser()
+  // // get posts
+  // await queryClient.prefetchInfiniteQuery({
+  //   queryKey: ["posts", "all"],
+  //   queryFn: ({ pageParam = "" }) => getMyPostsFeed(pageParam),
+  //   getNextPageParam: (lastPage) => {
+  //     return lastPage?.metaData.lastCursor;
+  //   },
+  //   enabled: !!user,
+  // });
 
+  return <HomeView />;
+};
 
-const MainPage = () => {
-
-    const { setting : {theme}, } = useSettingContext();
-  //  console.log("theme in main page", theme);
-  return (
-    <div>HomePage: {theme}</div>
-  )
-}
-
-export default MainPage
+export default HomePage;
